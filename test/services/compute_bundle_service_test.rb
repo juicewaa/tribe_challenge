@@ -10,7 +10,7 @@ class ComputeBundleServiceTest < ActiveSupport::TestCase
   end
 
   test 'should return correct computations' do
-    result = ComputeBundleService.new(img: 10, flac: 15, vid: 13)
+    result = ComputeBundleService.new(img: 10, flac: 15, vid: 13).call
 
     expected_result = {
       img: {
@@ -27,12 +27,12 @@ class ComputeBundleServiceTest < ActiveSupport::TestCase
       },
     }
 
-    # assert_equal(expected_result, result)
+    assert_equal(expected_result, result)
   end
 
-  test 'should return error if minimum bundle not reached' do
+  test 'should return error message if minimum bundle not reached' do
   end
 
-  test 'should return error if order is not a bundle' do
+  test 'should return error message if order is not a bundle' do
   end
 end
