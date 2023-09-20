@@ -1,3 +1,4 @@
+# usage: ComputeBundleService.new(img: 10, flac: 15, vid: 13).call
 class ComputeBundleService
   BUNDLES = {
     img:  { name: 'Image', prices: { 5 => 450, 10 => 800 }},
