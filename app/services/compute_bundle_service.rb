@@ -1,4 +1,4 @@
-# usage: ComputeBundleService.new(img: 10, flac: 15, vid: 13).call
+# usage: ComputeBundleService.new(**args).call
 class ComputeBundleService
   BUNDLES = {
     img:  { name: 'Image', prices: { 5 => 450, 10 => 800 }},
@@ -7,16 +7,16 @@ class ComputeBundleService
   }
 
   def initialize(img: 0, flac: 0, vid: 0)
-    @img = img
-    @flac = flac
-    @vid = vid
+    @image_order = img
+    @audio_order = flac
+    @video_order  = vid
   end
 
   def call
     {
-      img: calculate(:img, @img),
-      flac: calculate(:flac, @flac),
-      vid: calculate(:vid, @vid),
+      img: { order: @image_order, **calculate(:img, @image_order) },
+      flac: { order: @audio_order, **calculate(:flac, @audio_order) },
+      vid: { order: @video_order, **calculate(:vid, @video_order) },
     }
   end
 
@@ -28,7 +28,7 @@ class ComputeBundleService
     minimum_bundle = prices.keys.min
     sorted_bundle = sort_bundle(prices)
 
-    if order < minimum_bundle
+    if order < minimum_bundle && !order.zero?
       return { msg: "Minimum order for #{bundle[:name]} bundle is #{minimum_bundle}." }
     end
 
@@ -49,7 +49,7 @@ class ComputeBundleService
       end
 
       if remaining_order.zero?
-        return { total: total_price, breakdown: breakdown }
+        return { total_cost: total_price, breakdown: breakdown }
       end
 
       sorted_bundle.shift

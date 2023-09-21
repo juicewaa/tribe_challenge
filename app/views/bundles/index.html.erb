@@ -1,0 +1,22 @@
+<h1>Input Order Bundles</h1>
+
+<%= form_with url: bundles_breakdown_path do |f| %>
+  <div>
+    <label for="img">Image:</label>
+    <%= f.number_field :img %>
+  </div>
+  <br>
+  <div>
+    <label for="img">Audio:</label>
+    <%= f.number_field :flac %>
+  </div>
+  <br>
+  <div>
+    <label for="img">Video:</label>
+    <%= f.number_field :vid %>
+  </div>
+  <br>
+  <div>
+    <%= f.submit 'Submit' %>
+  </div>
+<% end %>

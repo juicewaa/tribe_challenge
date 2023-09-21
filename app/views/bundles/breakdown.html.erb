@@ -1,0 +1,45 @@
+<style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+</style>
+
+<h1>Breakdown Result</h1>
+
+<table>
+  <tr>
+    <th>Format</th>
+    <th>Total Cost</th>
+    <th>Breakdown</th>
+  </tr>
+  <tr>
+  <% ComputeBundleService::BUNDLES.keys.each do |key| %>
+    <tr>
+      <% bundle = ComputeBundleService::BUNDLES[key] %>
+      <td><%= "#{bundle[:name]} (#{@result[key][:order]})" %></td>
+      <td>$<%= @result[key][:total_cost].to_f %></td>
+      <% if @result[key][:msg].present? %>
+        <td><%= @result[key][:msg] %></td>
+      <% else %>
+        <td>
+          <% @result[key][:breakdown].each do |breakdown| %>
+            <% quantity, per_bundle = breakdown %>
+            <p><%= "#{quantity} X #{per_bundle} ($#{bundle[:prices][per_bundle]})" %></p>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
