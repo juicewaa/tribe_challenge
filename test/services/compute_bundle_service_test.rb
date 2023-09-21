@@ -14,15 +14,18 @@ class ComputeBundleServiceTest < ActiveSupport::TestCase
 
     expected_result = {
       img: {
-        total: 800,
+        order: 10,
+        total_cost: 800,
         breakdown: [[1, 10]],
       },
       flac: {
-        total: 1957.50,
+        order: 15,
+        total_cost: 1957.50,
         breakdown: [[1, 9], [1, 6]],
       },
       vid: {
-        total: 2370,
+        order: 13,
+        total_cost: 2370,
         breakdown: [[2, 5], [1, 3]],
       },
     }
@@ -31,18 +34,18 @@ class ComputeBundleServiceTest < ActiveSupport::TestCase
   end
 
   test 'should return error message if minimum bundle not reached' do
-    result = ComputeBundleService.new(img: 20, flac: 0, vid: 1).call
+    result = ComputeBundleService.new(img: 20, flac: 2, vid: 1).call
 
-    assert_equal({ total: 1600, breakdown: [[2, 10]] }, result[:img])
-    assert_equal({ msg: "Minimum order for Audio bundle is 3." }, result[:flac])
-    assert_equal({ msg: "Minimum order for Video bundle is 3." }, result[:vid])
+    assert_equal({ order: 20, total_cost: 1600, breakdown: [[2, 10]] }, result[:img])
+    assert_equal({ order: 2, msg: "Minimum order for Audio bundle is 3." }, result[:flac])
+    assert_equal({ order: 1, msg: "Minimum order for Video bundle is 3." }, result[:vid])
   end
 
   test 'should return error message if order is not a bundle' do
     result = ComputeBundleService.new(img: 11, flac: 13, vid: 25).call
 
-    assert_equal({ msg: 'Number of Image order can`t be bundled.' }, result[:img])
-    assert_equal({ msg: 'Number of Audio order can`t be bundled.' }, result[:flac])
-    assert_equal({ total: 4500, breakdown: [[5, 5]] }, result[:vid])
+    assert_equal({ order: 11, msg: 'Number of Image order can`t be bundled.' }, result[:img])
+    assert_equal({ order: 13, msg: 'Number of Audio order can`t be bundled.' }, result[:flac])
+    assert_equal({ order: 25, total_cost: 4500, breakdown: [[5, 5]] }, result[:vid])
   end
 end
